@@ -8,6 +8,7 @@
 
 return array(
    /*запросу news соответсвует строка news/index*/ /*будет вызван метод actionIndex в контроллере NewsController */
-   'news' => 'news/index',         //actionIndex in NewsController
-   'products' => 'product/list'    // actionList in ProductController
+    'news/([a-z]+)/([0-9]+)' => 'news/view/$1/$2',   //actionView(view one news) in NewsController mask1 = category, mask2= id
+    'news' => 'news/index',         //actionIndex in NewsController
+    'products' => 'product/list'    // actionList in ProductController
 );

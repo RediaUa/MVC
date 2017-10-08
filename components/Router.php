@@ -37,13 +37,19 @@ class Router
             //сравниваем $uriPattern и uri
             if(preg_match("~$uriPattern~", $uri))//использую разделителями ~ потому что в строке могут быть /
             {
+                //'news/([a-z]+)/([0-9]+)' => 'news/view/$1/$2'
+                $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
+
+
+
                 //если есть совпадение, определить какой контроллер и action обрабатывает запрос
-                $segments = explode('/', $path);
+                $segments = explode('/', $internalRoute);
                 $controllerName = array_shift($segments).'Controller';//'присваивает и извлекает/удаляет segments[0]
                 $controllerName = ucfirst($controllerName);//uppercase first letter | controllers done
 
                 $actionName = 'action'.ucfirst(array_shift($segments)); //action done
 
+                $parametrs = $segments; //array with parametrs from uri
                 // подключить файл класса-контроллера
 
                 $controllerFile = ROOT.'/controllers/'.$controllerName.".php";
@@ -55,10 +61,12 @@ class Router
                 }
                 //создать обьект, вызвать метод (т.е. action)
                 $controllerObject = new $controllerName;
-                $result = $controllerObject->$actionName();
+                //$result =  $controllerObject->$actionName($parametrs);
+                /*for identification parametrs use next function*/
+                $result = call_user_func_array(array($controllerObject, $actionName), $parametrs);
                 if($result != null)
                 {
-                    break;
+                    break;  //если action сработал прерываем цикл
                 }
             }
         }

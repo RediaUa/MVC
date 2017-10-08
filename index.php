@@ -1,5 +1,6 @@
 <?php
 
+
 //FRONT CONTROLLER
 
 //1. General settings
